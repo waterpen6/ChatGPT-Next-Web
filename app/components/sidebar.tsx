@@ -158,9 +158,10 @@ export function SideBar(props: { className?: string }) {
           LLB智能助手
         </div>
         <div className={styles["sidebar-sub-title"]}>
-          如果有问题那就是llb的问题.
+          本模型是GPT-4o，对接官网最新api接口，支持画图、识图、分析链接内容等。文件先转为链接，再发送给GPT，即可分析文件内容。
+          所有对话内容加密，不会被记录。
         </div>
-        <h1>项目暂时不可用，正在紧急抢修，有问题发邮件至1836002084@qq.com</h1>
+        <div>联系邮箱1836002084@qq.com</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
