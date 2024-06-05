@@ -160,6 +160,7 @@ export function SideBar(props: { className?: string }) {
         <div className={styles["sidebar-sub-title"]}>
           如果有问题那就是llb的问题.
         </div>
+        <h1>项目暂时不可用，正在紧急抢修，有问题发邮件至1836002084@qq.com</h1>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
