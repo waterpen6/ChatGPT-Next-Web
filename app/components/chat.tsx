@@ -8,7 +8,7 @@ import React, {
   Fragment,
   RefObject,
 } from "react";
-
+const OSS = require("ali-oss");
 import SendWhiteIcon from "../icons/send-white.svg";
 import BrainIcon from "../icons/brain.svg";
 import RenameIcon from "../icons/rename.svg";
@@ -24,6 +24,7 @@ import MinIcon from "../icons/min.svg";
 import ResetIcon from "../icons/reload.svg";
 import BreakIcon from "../icons/break.svg";
 import SettingsIcon from "../icons/chat-settings.svg";
+import UploadIcon from "../icons/upload.svg";
 import DeleteIcon from "../icons/clear.svg";
 import PinIcon from "../icons/pin.svg";
 import EditIcon from "../icons/rename.svg";
@@ -80,6 +81,7 @@ import {
   showConfirm,
   showPrompt,
   showToast,
+  Loading,
 } from "./ui-lib";
 import { useNavigate } from "react-router-dom";
 import {
@@ -423,6 +425,7 @@ export function ChatActions(props: {
   setAttachImages: (images: string[]) => void;
   setUploading: (uploading: boolean) => void;
   showPromptModal: () => void;
+  uploadFiles: () => void;
   scrollToBottom: () => void;
   showPromptHints: () => void;
   hitBottom: boolean;
@@ -510,6 +513,14 @@ export function ChatActions(props: {
           onClick={props.showPromptModal}
           text={Locale.Chat.InputActions.Settings}
           icon={<SettingsIcon />}
+        />
+      )}
+      {/* 上传文件按钮 */}
+      {props.hitBottom && (
+        <ChatAction
+          onClick={props.uploadFiles}
+          text={"上传文件"}
+          icon={<UploadIcon />}
         />
       )}
 
@@ -693,6 +704,9 @@ function _Chat() {
   const navigate = useNavigate();
   const [attachImages, setAttachImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  // 上传文件
+  const [file, setFile] = useState(null);
+  const fileUrl = useRef(null);
 
   // prompt hints
   const promptStore = usePromptStore();
@@ -1476,6 +1490,63 @@ function _Chat() {
           setAttachImages={setAttachImages}
           setUploading={setUploading}
           showPromptModal={() => setShowPromptModal(true)}
+          // 上传文件函数
+          uploadFiles={() => {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "*/*";
+            // fileInput.multiple = true;
+            fileInput.onchange = (event: any) => {
+              const files = event.target.files;
+              console.log("files文件=", files);
+              // 文件不得超过20m
+              if (files[0].size > 20 * 1024 * 1024) {
+                showConfirm("文件大小不得超过20M");
+                return;
+              }
+              if (files) {
+                // 上传文件提醒
+                showToast("上传文件中", {
+                  text: "请耐心等待……",
+                  onClick: () => {},
+                });
+                setUserInput("上传文件中，请勿操作，正在生成文件链接，稍等...");
+
+                setFile(files[0]);
+                // 设置文件名字,日期+文件名
+                const date = new Date();
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const fileName = `${year}年${month}月${day}日-${files[0].name}`;
+
+                // 初始化OSS客户端
+                const client = new OSS({
+                  region: "oss-cn-hongkong", // 示例：'oss-cn-hangzhou'，填写Bucket所在地域。
+                  accessKeyId: "LTAI5tQfj8EZiSCHKYTSsFUF", // 确保已设置环境变量OSS_ACCESS_KEY_ID。
+                  accessKeySecret: "rb08ZS2WtMD9hi124JWGwryvVrM0Kk", // 确保已设置环境变量OSS_ACCESS_KEY_SECRET。
+                  bucket: "llb-01", // 示例：'my-bucket-name'，填写存储空间名称。
+                  secure: true, // 默认为false。当值为true时，使用HTTPS发起请求。
+                });
+                // 上传文件
+                client
+                  .put(fileName, files[0])
+                  .then(async (result: any) => {
+                    // 获取文件下载链接，设置有效时间1小时
+                    const downloadUrl = client.signatureUrl(fileName, {
+                      expires: 3600,
+                    });
+                    fileUrl.current = downloadUrl;
+                    // 在原本的userInput前面添加url
+                    setUserInput(fileUrl.current + " " + userInput);
+                  })
+                  .catch((err: any) => {
+                    console.error("上传失败:", err);
+                  });
+              }
+            };
+            fileInput.click();
+          }}
           scrollToBottom={scrollToBottom}
           hitBottom={hitBottom}
           uploading={uploading}

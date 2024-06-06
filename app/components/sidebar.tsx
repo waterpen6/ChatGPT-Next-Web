@@ -158,8 +158,8 @@ export function SideBar(props: { className?: string }) {
           LLB智能助手
         </div>
         <div className={styles["sidebar-sub-title"]}>
-          本模型是GPT-4o，对接官网最新api接口，支持画图、识图、分析链接内容等。文件先转为链接，再发送给GPT，即可分析文件内容。
-          所有对话内容加密，不会被记录。
+          本模型是GPT-4o，对接官网最新api接口，支持画图、识图、分析链接内容等。上传文件时会转为链接，再发送给GPT，即可分析文件内容。
+          文件分析对pdf支持较好，建议转为pdf格式再上传，如遇到GPT无法识别，新开聊天页反复几次即可。
         </div>
         <div>联系邮箱1836002084@qq.com</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
