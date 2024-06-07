@@ -1498,7 +1498,6 @@ function _Chat() {
             // fileInput.multiple = true;
             fileInput.onchange = (event: any) => {
               const files = event.target.files;
-              console.log("files文件=", files);
               // 文件不得超过20m
               if (files[0].size > 20 * 1024 * 1024) {
                 showConfirm("文件大小不得超过20M");
@@ -1523,8 +1522,8 @@ function _Chat() {
                 // 初始化OSS客户端
                 const client = new OSS({
                   region: "oss-cn-hongkong", // 示例：'oss-cn-hangzhou'，填写Bucket所在地域。
-                  accessKeyId: "LTAI5tQfj8EZiSCHKYTSsFUF", // 确保已设置环境变量OSS_ACCESS_KEY_ID。
-                  accessKeySecret: "rb08ZS2WtMD9hi124JWGwryvVrM0Kk", // 确保已设置环境变量OSS_ACCESS_KEY_SECRET。
+                  accessKeyId: process.env.NEXT_PUBLIC_AliKeyIdL, // 确保已设置环境变量OSS_ACCESS_KEY_ID。
+                  accessKeySecret: process.env.NEXT_PUBLIC_AliKeySecret, // 确保已设置环境变量OSS_ACCESS_KEY_SECRET。
                   bucket: "llb-01", // 示例：'my-bucket-name'，填写存储空间名称。
                   secure: true, // 默认为false。当值为true时，使用HTTPS发起请求。
                 });
