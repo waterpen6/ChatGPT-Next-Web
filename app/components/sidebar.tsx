@@ -157,6 +157,7 @@ export function SideBar(props: { className?: string }) {
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
           LLB智能助手
         </div>
+        <div>【上流线路出现了问题，正在抢修，当前每天对话限制】</div>
         <div className={styles["sidebar-sub-title"]}>
           问题反馈：
           1、对话默认GPT3.5，需自行设置机器人为GPT-4o（有朋友反馈机器人比较傻，检查后发现没有选择GPT4o进行对话），点击聊天框上方机器人图标或者到设置页设置模型GPT4o。
