@@ -145,9 +145,8 @@ export function SideBar(props: { className?: string }) {
 
   return (
     <div
-      className={`${styles.sidebar} ${props.className} ${
-        shouldNarrow && styles["narrow-sidebar"]
-      }`}
+      className={`${styles.sidebar} ${props.className} ${shouldNarrow && styles["narrow-sidebar"]
+        }`}
       style={{
         // #3016 disable transition on ios mobile screen
         transition: isMobileScreen && isIOSMobile ? "none" : undefined,
@@ -157,18 +156,15 @@ export function SideBar(props: { className?: string }) {
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
           LLB智能助手
         </div>
-        <div>【上流线路出现了问题，正在抢修，当前每天对话限制】</div>
         <div className={styles["sidebar-sub-title"]}>
-          问题反馈：
-          1、对话默认GPT3.5，需自行设置机器人为GPT-4o（有朋友反馈机器人比较傻，检查后发现没有选择GPT4o进行对话），点击聊天框上方机器人图标或者到设置页设置模型GPT4o。
+          注意：1、由于上游接口出现问题，现全部模型采用Google最新的Gemini 1.5
+          Pro（支持200万token上下文记忆，网站实测响应速度快于4o）。接口修复完我们将尽快恢复GPT4o。
           2、机器人每次回答限制2000token，超过会截断，如果发现回答末尾为省略号……，发送“继续”即可。
         </div>
         <div className={styles["sidebar-sub-title"]}>
-          支持画图、识图、文件分析、分析链接内容等。上传文件时会转为链接，再发送给GPT，即可分析文件内容。
-          文件分析对pdf支持较好，建议转为pdf格式再上传，如遇到GPT无法识别，重新发送反复几次即可。
+          支持画图、识图、文件分析、分析链接内容等，如遇到GPT无法识别，重新发送反复几次即可。
           联系邮箱1836002084@qq.com
         </div>
-        {/* <div>联系邮箱1836002084@qq.com</div> */}
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
